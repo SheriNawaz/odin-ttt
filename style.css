@@ -1,14 +1,42 @@
+body{
+    background-color: rgb(54, 54, 54);
+    font-family: 'Roboto', sans-serif;
+}
+
+#header {
+    text-align: center;
+    font-size: 100px;
+    margin-top: 25px;
+    color: white;
+}
+
+#turn {
+    text-align: center;
+    font-size: 50px;
+    margin-top: 25px;
+    color: white;
+}
+
 #grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fit, 33.3333333%);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     gap: 5px;
-    background-color: antiquewhite;
-    width: 50%;
-    height: 50%;
+    background-color: black;
+    border-radius: 1%;
+    width: 30%;
+    margin: 0 auto;
+    padding: 15px;
 }
 .cell {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: orange;
+    background-color: rgb(255, 255, 255);
+    font-size: 2rem;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    border-radius: 5%;
 }
