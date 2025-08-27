@@ -2,6 +2,7 @@ const gameboard = (function () {
     let board = ["","","","","","","","",""]
     function addMarker(index, marker){
         board[index - 1] = marker
+        displayController.mark(index, marker)
     }
     return {
         board: board,
@@ -14,8 +15,8 @@ function createPlayer(name, marker){
 }
 
 const gameController = (function() {
-    const p1 = createPlayer("1", "X");
-    const p2 = createPlayer("2", "O");
+    const p1 = createPlayer("Player 1", "X");
+    const p2 = createPlayer("Player 2", "O");
     let currentPlayer = p1;
     let gameRunning = true;
     let winningSquares = [[0,1,2], [3,4,5], [6,7,8],[0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
@@ -23,7 +24,9 @@ const gameController = (function() {
     function reset() {
         gameboard.board.fill(""); 
         currentPlayer = p1;
-        console.log("Game reset. Player " + currentPlayer.name + " starts.");
+        displayController.turnText.textContent =  currentPlayer.name + "'s Turn";
+        displayController.resetCells();
+        gameRunning = true;
     }
 
     function checkWin(){
@@ -33,36 +36,64 @@ const gameController = (function() {
                 gameboard.board[combo[1]] === currentPlayer.marker &&
                 gameboard.board[combo[2]] === currentPlayer.marker
             ) {
-                console.log("Player " + currentPlayer.name + " WINS");
-                reset();
+                displayController.turnText.textContent =  currentPlayer.name + " WINS";
+                gameRunning = false;
                 return;
             }
         }
     }
 
     function playRound(index) {
-        
-        if (gameboard.board[index - 1] === "") {
-            gameboard.addMarker(index, currentPlayer.marker);
-            console.log(gameboard.board);
-            checkWin();
-            if (!gameboard.board.includes("")) {
-                gameRunning = false;
-                console.log("TIE");
-                reset();
-                return;
-            }
-            currentPlayer = currentPlayer === p1 ? p2 : p1;
-        } else {
+        if (!gameRunning) return;
+
+        if (gameboard.board[index - 1] !== "") {
             console.log("Occupied");
+            return;
+        }
+
+        gameboard.addMarker(index, currentPlayer.marker);
+        console.log(gameboard.board);
+        checkWin();
+
+        if (!gameboard.board.includes("")) {
+            gameRunning = false;
+            displayController.turnText.textContent = "Game Is A Tie!";
+            return;
+        }
+
+        if(gameRunning){
+            currentPlayer = currentPlayer === p1 ? p2 : p1;
+            displayController.turnText.textContent = currentPlayer.name + "'s Turn";
         }
     }
 
     return {
-        playRound
+        playRound, reset
     }
 })();
 
 const displayController = (function(){
+    let turnText = document.getElementById("turn");
 
+    document.getElementById("reset").addEventListener('click', function() {
+        gameController.reset();
+    });
+
+    document.querySelectorAll('.cell').forEach(cell => {
+    cell.addEventListener('click', function() {
+        gameController.playRound(parseInt(cell.id));
+        });
+    });
+    function resetCells(){
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.textContent = "";
+        });
+    }
+    function mark(index, marker){
+        let square = document.getElementById(index);
+        square.textContent = marker;
+    }
+    return {
+        turnText: turnText, mark, resetCells
+    }
 })();
