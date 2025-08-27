@@ -1,0 +1,14 @@
+#grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, 33.3333333%);
+    gap: 5px;
+    background-color: antiquewhite;
+    width: 50%;
+    height: 50%;
+}
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: orange;
+}
