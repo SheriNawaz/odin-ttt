@@ -15,9 +15,11 @@ function createPlayer(name, marker){
 }
 
 const gameController = (function() {
-    const p1 = createPlayer("Player 1", "X");
-    const p2 = createPlayer("Player 2", "O");
+    const p1 = createPlayer(prompt("Enter Player 1's Name: "), "X");
+    const p2 = createPlayer(prompt("Enter Player 2's Name: "), "O");
+
     let currentPlayer = p1;
+
     let gameRunning = true;
     let winningSquares = [[0,1,2], [3,4,5], [6,7,8],[0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
     
@@ -68,12 +70,14 @@ const gameController = (function() {
     }
 
     return {
-        playRound, reset
+        playRound, reset, currentPlayer
     }
 })();
 
 const displayController = (function(){
     let turnText = document.getElementById("turn");
+    turnText.textContent =  gameController.currentPlayer.name + "'s Turn";
+
 
     document.getElementById("reset").addEventListener('click', function() {
         gameController.reset();
